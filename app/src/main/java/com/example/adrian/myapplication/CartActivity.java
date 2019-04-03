@@ -1,39 +1,52 @@
 package com.example.adrian.myapplication;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.example.adrian.myapplication.databinding.ActivityCartBinding;
+
+import java.util.ArrayList;
 
 public class CartActivity extends AppCompatActivity {
+    ActivityCartBinding binding;
+    ArrayList<String> listItem;
+    ArrayList<String> product;
+    ArrayAdapter adapter;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
+        listItem = new ArrayList<>();
+        listView = findViewById(R.id.listView);
+
+        readFromDB();
     }
 
-    /*private void readFromDB() {
-        String barcode = binding.barcodeTextView.getText().toString(); //przypisuje numer kodu kreskowego do stronga tak aby moc potem szukac go w bazie
-        SQLiteDatabase db = new DBHelper(this).getReadableDatabase(); //tworzymy komponent do odczytu z bazy
-
-        String[] projection = { //wybieram kolumny z bazy ktore bede chcial potem wyswietlic
-                DBContract.Product.COLUMN_PRODUCT_NAME,
-                DBContract.Product.COLUMN_PRODUCT_PRICE,
-                DBContract.Product.COLUMN_PRODUCT_QUANTITY
-        };
-
-        String selection = DBContract.Product.COLUMN_BARCODE_NUMBER + " = ?"; //wybieram kolumne do ktorej bede chcial porownywac i na jej podstawie wyszukkiwac w bazie
-        String[] selectionArgs = {barcode}; //przypisuje wczesniej zadeklarowany String z kodem kreskowym - w poszukiwaniu konkretnie tego kodu bedzie przeszukiwana baza
-
-        Cursor cursor = db.query( //tworze ktory bedzie przeszukiwal baze danych
-                DBContract.Product.TABLE_NAME, //nazwa przeszukiwanej tabeli
-                projection, //kolumny do wyswietlenia
-                selection, //kolumny do sprawdzenia
-                selectionArgs, //argumenty do porownania z powyzsza kolumna
-                null, //group by
-                null, //having
-                null //order by <- tych trzech nie uzywam poniewaz otrzymany wynik bedzie tylko jeden
-        );
-
-        binding.recyclerView.setAdapter(new RecyclerViewAdapter(this, cursor)); //przesylam kursor czyli wynik odczytu z bazy do mojego komponentu w layoucie
-    } */
+    private void readFromDB() {
+        SQLiteDatabase db = new DBHelper(this).getReadableDatabase();
+        String query = "Select * from " + DBContract.Product.TABLE_NAME;
+        Cursor cursor = db.rawQuery(query, null);
+        float pricePerOne;
+        float fullPrice = 0;
+        if (cursor.getCount() == 0) {
+            Toast.makeText(this, "Koszyk pusty", Toast.LENGTH_LONG).show();
+        } else {
+            while (cursor.moveToNext()) {
+                pricePerOne = Float.parseFloat(cursor.getString(3)) * Float.parseFloat(cursor.getString(4));
+                fullPrice += pricePerOne;
+                listItem.add(cursor.getString(2) + " | sztuk:  " + cursor.getString(4)
+                        + " | łączna cena: " + pricePerOne + " (" + cursor.getString(3) + " za szt.)");
+            }
+            listItem.add("DO ZAPŁATY: " + fullPrice);
+            adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItem);
+            listView.setAdapter(adapter);
+        }
+    }
 }

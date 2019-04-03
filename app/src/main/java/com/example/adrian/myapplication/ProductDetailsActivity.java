@@ -56,7 +56,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
         addToCartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveToCart();
+                if(Integer.parseInt(binding.quantityEditText.getText().toString()) > 0 &&
+                        Integer.parseInt(binding.quantityEditText.getText().toString()) <= Integer.parseInt(productClass.getQuantity())){
+                    saveToCart();
+
+                }
+                else {
+                    showToastMessage("Wprowadź prawidłową liczbę!");
+                }
             }
         });
 
@@ -122,5 +129,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
         }
     }
 
+    private void showToastMessage(String message){
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
+    }
 }
