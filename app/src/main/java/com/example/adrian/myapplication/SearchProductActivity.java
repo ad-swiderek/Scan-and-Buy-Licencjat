@@ -14,7 +14,7 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import com.example.adrian.myapplication.databinding.ActivitySearchProductBinding;
-//
+
 public class SearchProductActivity extends AppCompatActivity {
 
     ActivitySearchProductBinding binding;
