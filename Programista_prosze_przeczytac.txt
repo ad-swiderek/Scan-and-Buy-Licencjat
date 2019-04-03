@@ -1,0 +1,5 @@
+Skompilowanie i uruchomienie aplikacji wymaga u¿ycia Android Studio. Po uruchomieniu Android Studio wybieramy File->Open i otwieramy nasz KATALOG z aplikacj¹. 
+Nastêpnie pod³¹czamy nasz telefon z systemem Android do komputera (w telefonie nale¿y wczeœniej uruchomiæ debugowanie USB je¿eli ta opcja nie jest w³¹czona)
+i przechodzimy do Run->Run'app', wybieramy nasz telefon z listy i klikamy OK. 
+Po chwili aplikacja automatycznie zainstaluje siê na naszym telefonie i od tego czasu mo¿emy z niej korzystaæ.
+W folderze docs znajduje siê dokumentacja projektu.

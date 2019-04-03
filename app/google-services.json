@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "529644559371",
+    "firebase_url": "https://scanandbuy-53a52.firebaseio.com",
+    "project_id": "scanandbuy-53a52",
+    "storage_bucket": "scanandbuy-53a52.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529644559371:android:a511285bdb4e40c1",
+        "android_client_info": {
+          "package_name": "com.example.adrian.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "529644559371-ksjh4fgiff4uidbgod4pnh6tq4gbq69m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFSUeqPcjnYzlR3P0WwZO25vfZ9Ytr8ug"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
