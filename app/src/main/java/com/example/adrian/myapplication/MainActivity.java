@@ -20,12 +20,15 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.adrian.scanandbuy"; //wiadomosc (kod kreskowy) do pozniejszego przeslania w intencie
     private final Activity activity = this;
     private static boolean isStaff; //warunek sprawdzajacy czy wybrano funkcję klienta czy pracownika
-
+    private boolean firstUse = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        if (firstUse) {
+            this.deleteDatabase("products_database");
+            firstUse = false;
+        }
         staffBtn = (Button) findViewById(R.id.staffBtn); //przypisuje przyciski do tych na layoucie
         customerBtn = (Button) findViewById(R.id.customerBtn);
         helpBtn = findViewById(R.id.helpBtn);
@@ -54,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void scan() { //uruchamiam skaner kodow kreskowych
+    protected void scan() { //uruchamiam skaner kodow kreskowych
         IntentIntegrator integrator = new IntentIntegrator(activity); //tworze specjalny intent z biblioteki zxing ktory pozwala przejsc do activity ze skanerem
         integrator.setBeepEnabled(false); //wylaczam dzwiek skanera
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES); //skaner jest w trybie skanowania wszystkich mozliwych kodow dostepnych w bibliotece
@@ -71,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(EXTRA_MESSAGE, message);
             startActivity(intent);
         } else if (result != null && isStaff == false) { //to samo tylko dla klienta wiec przechodze do activity z ktorego odczytuje kod z bazy
-            Intent intent = new Intent(this, SearchProductActivity.class);
+            Intent intent = new Intent(this, ProductDetailsActivity.class);
             String message = result.getContents().toString();
             intent.putExtra(EXTRA_MESSAGE, message);
             startActivity(intent);
@@ -80,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showHelpMessage(){
+    private void showHelpMessage() {
         Toast.makeText(this, "Do działania aplikacji wymagany jest dostęp do internetu oraz moduł aparatu", Toast.LENGTH_LONG).show();
 
     }

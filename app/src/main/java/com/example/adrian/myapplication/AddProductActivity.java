@@ -36,41 +36,10 @@ public class AddProductActivity extends AppCompatActivity {
         binding.saveBtn.setOnClickListener(new View.OnClickListener() { //tworzymy wydarzenie ktore po kliknieciu w button wywola metode zapisujaca dane do bazy
             @Override
             public void onClick(View v) {
-                saveToDB();
                 saveToFirebase();
             }
         });
 
-    }
-
-    private void saveToDB() {
-        SQLiteDatabase db = new DBHelper(this).getWritableDatabase(); //tworzymy komponent ktory pozwoli zapisac dane do bazy
-
-        ContentValues values = new ContentValues();
-
-        values.put(DBContract.Product.COLUMN_BARCODE_NUMBER, binding.barcodeTextView.getText().toString()); //wprowadzamy wartosci wpisane w naszym layoucie do wczesniej utworzonego obiektu values
-        values.put(DBContract.Product.COLUMN_PRODUCT_NAME, binding.nameEditText.getText().toString());
-        values.put(DBContract.Product.COLUMN_PRODUCT_PRICE, binding.priceEditText.getText().toString());
-        values.put(DBContract.Product.COLUMN_PRODUCT_QUANTITY, binding.quantityEditText.getText().toString());
-
-        long newRowId = 0; //tworzymy zmienna do ktorej przypiszemy id nowego wiersza (w przypadku bledu podczas dodawania zostanie zwrocona wartosc -1, w przypadku poprawnego dodania - wartosc >=1, w naszym przypadku jezeli kod kreskowy nie bedzie unikalny zostanie zwrocone 0)
-
-        try { //łapanie wyjątków w przypadku bledu podczas dodawania do bazy
-            newRowId = db.insertOrThrow(DBContract.Product.TABLE_NAME, null, values);
-        } catch (SQLException e) {
-            Log.e("Exception", "SQLException" + String.valueOf(e.getMessage()));
-            e.printStackTrace();
-        }
-
-        if(newRowId == -1) { //wyswietlanie tego o czym pisalem powyzej w postaci toasta
-            Toast.makeText(this, "Podczas dodawania wystąpił błąd", Toast.LENGTH_LONG).show();
-        }
-        else if(newRowId == 0){
-            Toast.makeText(this, "Produt występuje już w bazie", Toast.LENGTH_LONG).show();
-        }
-        else{
-            Toast.makeText(this, "Dodano pomyślnie", Toast.LENGTH_LONG).show();
-        }
     }
 
     private void saveToFirebase(){
