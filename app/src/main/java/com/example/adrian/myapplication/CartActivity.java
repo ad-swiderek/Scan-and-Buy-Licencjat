@@ -2,37 +2,44 @@ package com.example.adrian.myapplication;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.adrian.myapplication.databinding.ActivityCartBinding;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 public class CartActivity extends AppCompatActivity {
     ActivityCartBinding binding;
-    ArrayList<String> listItem;
-    ArrayList<String> product;
-    ArrayAdapter adapter;
-    ListView listView;
-
+    private ArrayList<String> listItem;
+    private ArrayList<String> product;
+    private ArrayAdapter adapter;
+    private ListView listView;
+    private TextView totalAmountTV;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
         listItem = new ArrayList<>();
         listView = findViewById(R.id.listView);
-
+        totalAmountTV = findViewById(R.id.totalAmountTV);
         readFromDB();
+
     }
 
     private void readFromDB() {
         SQLiteDatabase db = new DBHelper(this).getReadableDatabase();
         String query = "Select * from " + DBContract.Product.TABLE_NAME;
-        Cursor cursor = db.rawQuery(query, null);
+        final Cursor cursor = db.rawQuery(query, null);
         float pricePerOne;
         float fullPrice = 0;
         if (cursor.getCount() == 0) {
@@ -44,9 +51,22 @@ public class CartActivity extends AppCompatActivity {
                 listItem.add(cursor.getString(2) + " | sztuk:  " + cursor.getString(4)
                         + " | łączna cena: " + pricePerOne + " (" + cursor.getString(3) + " za szt.)");
             }
-            listItem.add("DO ZAPŁATY: " + fullPrice);
+            totalAmountTV.setText("DO ZAPŁATY: " + fullPrice + " PLN");
             adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItem);
             listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    adapter.remove(adapter.getItem(position));
+
+
+                }
+            });
         }
+    }
+
+    private void showToastMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
     }
 }

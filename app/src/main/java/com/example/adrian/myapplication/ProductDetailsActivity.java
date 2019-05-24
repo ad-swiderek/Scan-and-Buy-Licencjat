@@ -53,10 +53,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
 
         Button addToCartBtn = findViewById(R.id.addToCartBtn);
+
         addToCartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Integer.parseInt(binding.quantityEditText.getText().toString()) > 0 &&
+                if(productClass.getQuantity()==null){
+                    showToastMessage("Nie odnaleziono produktu, zeskanuj ponownie!");
+                }
+                else if(binding.quantityEditText.getText().length()!=0 && Integer.parseInt(binding.quantityEditText.getText().toString()) > 0 &&
                         Integer.parseInt(binding.quantityEditText.getText().toString()) <= Integer.parseInt(productClass.getQuantity())){
                     saveToCart();
 
