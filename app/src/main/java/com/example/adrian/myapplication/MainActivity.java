@@ -19,8 +19,8 @@ public class MainActivity extends AppCompatActivity {
     private Button helpBtn;
     public static final String EXTRA_MESSAGE = "com.example.adrian.scanandbuy"; //wiadomosc (kod kreskowy) do pozniejszego przeslania w intencie
     private final Activity activity = this;
-    private static boolean isStaff; //warunek sprawdzajacy czy wybrano funkcję klienta czy pracownika
     private boolean firstUse = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,22 +29,12 @@ public class MainActivity extends AppCompatActivity {
             this.deleteDatabase("products_database");
             firstUse = false;
         }
-        staffBtn = (Button) findViewById(R.id.staffBtn); //przypisuje przyciski do tych na layoucie
         customerBtn = (Button) findViewById(R.id.customerBtn);
         helpBtn = findViewById(R.id.helpBtn);
-
-        staffBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { //sprawdzam czy wcisnieto przycisk pracownika czy klienta i uruchamiam aparat i skaner kodow kreskowych
-                isStaff = true;
-                scan();
-            }
-        });
 
         customerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isStaff = false;
                 scan();
             }
         });
@@ -68,18 +58,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data); //zapisuje rezultat naszego skanowania
-        if (result != null && isStaff == true) { //jezeli udalo sie zeskanowac i wczesniej wcisnieto przycisk "pracownik" to przechodze do activity w ktorym dodaje produkty i przekazuje w intencie moj numer z kodu kreskowego
-            Intent intent = new Intent(this, AddProductActivity.class);
-            String message = result.getContents().toString();
-            intent.putExtra(EXTRA_MESSAGE, message);
-            startActivity(intent);
-        } else if (result != null && isStaff == false) { //to samo tylko dla klienta wiec przechodze do activity z ktorego odczytuje kod z bazy
-            Intent intent = new Intent(this, ProductDetailsActivity.class);
-            String message = result.getContents().toString();
-            intent.putExtra(EXTRA_MESSAGE, message);
-            startActivity(intent);
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            try {
+                Intent intent = new Intent(this, ProductDetailsActivity.class);
+                String message = result.getContents().toString();
+                intent.putExtra(EXTRA_MESSAGE, message);
+                startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

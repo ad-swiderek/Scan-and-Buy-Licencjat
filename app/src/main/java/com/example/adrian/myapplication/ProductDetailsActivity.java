@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,16 +58,21 @@ public class ProductDetailsActivity extends AppCompatActivity {
         addToCartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(productClass.getQuantity()==null){
+                if (productClass.getQuantity() == null) {
                     showToastMessage("Nie odnaleziono produktu, zeskanuj ponownie!");
-                }
-                else if(binding.quantityEditText.getText().length()!=0 && Integer.parseInt(binding.quantityEditText.getText().toString()) > 0 &&
-                        Integer.parseInt(binding.quantityEditText.getText().toString()) <= Integer.parseInt(productClass.getQuantity())){
+                } else if (binding.quantityEditText.getText().length() != 0 && Integer.parseInt(binding.quantityEditText.getText().toString()) > 0 &&
+                        Integer.parseInt(binding.quantityEditText.getText().toString()) <= Integer.parseInt(productClass.getQuantity())) {
                     saveToCart();
 
-                }
-                else {
+                } else {
                     showToastMessage("Wprowadź prawidłową liczbę!");
+                }
+
+                try {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                } catch (Exception e) {
+                    // TODO: handle exception
                 }
             }
         });
@@ -122,18 +128,16 @@ public class ProductDetailsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if(newRowId == -1) { //wyswietlanie tego o czym pisalem powyzej w postaci toasta
+        if (newRowId == -1) { //wyswietlanie tego o czym pisalem powyzej w postaci toasta
             Toast.makeText(this, "Podczas dodawania wystąpił błąd", Toast.LENGTH_LONG).show();
-        }
-        else if(newRowId == 0){
+        } else if (newRowId == 0) {
             Toast.makeText(this, "Produt znajduje się już w koszyku", Toast.LENGTH_LONG).show();
-        }
-        else{
+        } else {
             Toast.makeText(this, "Dodano do koszyka", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void showToastMessage(String message){
+    private void showToastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 
     }
