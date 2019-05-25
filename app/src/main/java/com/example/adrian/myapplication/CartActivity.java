@@ -29,6 +29,7 @@ public class CartActivity extends AppCompatActivity {
     private TextView totalAmountTV;
     float fullPrice;
     public static final String EXTRA_MESSAGE = "com.example.adrian.myapplication";
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +44,13 @@ public class CartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sendTotalAmount();
+
             }
         });
     }
 
     private void readFromDB() {
-        SQLiteDatabase db = new DBHelper(this).getReadableDatabase();
+        db = new DBHelper(this).getReadableDatabase();
         String query = "Select * from " + DBContract.Product.TABLE_NAME;
         final Cursor cursor = db.rawQuery(query, null);
         float pricePerOne;
@@ -62,15 +64,14 @@ public class CartActivity extends AppCompatActivity {
                 listItem.add(cursor.getString(2) + " | sztuk:  " + cursor.getString(4)
                         + " | łączna cena: " + pricePerOne + " (" + cursor.getString(3) + " za szt.)");
             }
-            totalAmountTV.setText("DO ZAPŁATY: " + fullPrice + " PLN");
+            totalAmountTV.setText("DO ZAPŁATY: " + String.format("%.2f", fullPrice) + " PLN");
             adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItem);
             listView.setAdapter(adapter);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     adapter.remove(adapter.getItem(position));
-
-
+                    //readFromDB();
                 }
             });
         }
@@ -81,10 +82,15 @@ public class CartActivity extends AppCompatActivity {
 
     }
 
-    private void sendTotalAmount(){
+    private void sendTotalAmount() {
         Intent intent = new Intent(this, QRCodePayment.class);
-        String message = String.valueOf(fullPrice);
+        String message = String.format("%.2f", fullPrice);
         intent.putExtra(EXTRA_MESSAGE, message);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
+
+    /*private boolean deleteRow(String barcode){
+        return db.delete(DBContract.Product.TABLE_NAME, DBContract.Product.COLUMN_BARCODE_NUMBER + "=" + );
+    }*/
 }
