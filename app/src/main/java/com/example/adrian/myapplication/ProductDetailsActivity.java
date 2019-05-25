@@ -31,6 +31,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     DatabaseReference databaseProducts = database.getReference("products");
     private static final String TAG = "ProductDetailsActivity";
     private String message;
+
     ProductClass productClass = new ProductClass();
 
     @Override
@@ -59,21 +60,17 @@ public class ProductDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (productClass.getQuantity() == null) {
-                    showToastMessage("Nie odnaleziono produktu, zeskanuj ponownie!");
-                } else if (binding.quantityEditText.getText().length() != 0 && Integer.parseInt(binding.quantityEditText.getText().toString()) > 0 &&
-                        Integer.parseInt(binding.quantityEditText.getText().toString()) <= Integer.parseInt(productClass.getQuantity())) {
-                    saveToCart();
-
+                    showToastMessage("Nie odnaleziono produktu, sprawdź połączenie z internetem i zeskanuj ponownie!");
                 } else {
-                    showToastMessage("Wprowadź prawidłową liczbę!");
+                    saveToCart();
                 }
 
-                try {
+               /* try {
                     InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 } catch (Exception e) {
                     // TODO: handle exception
-                }
+                }*/
             }
         });
 
@@ -96,9 +93,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     productClass = ds.getValue(ProductClass.class);
                 }
-                binding.nameTextView.setText(productClass.getProductName());
-                binding.priceTextView.setText(productClass.getPrice());
-                binding.textView2.setText("Wprowadz liczbe sztuk (dostepne: " + productClass.getQuantity() + ")");
+                try {
+                    binding.nameTextView.setText(productClass.getProductName());
+                    binding.priceTextView.setText(productClass.getPrice());
+                    binding.quantityNumberPicker.setMinValue(1);
+                    binding.quantityNumberPicker.setMaxValue(Integer.parseInt(productClass.getQuantity()));
+                } catch (NumberFormatException e) {
+                    showToastMessage("Nie odnaleziono produktu, zeskanuj ponownie!");
+                }
             }
 
             @Override
@@ -117,7 +119,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         values.put(DBContract.Product.COLUMN_BARCODE_NUMBER, binding.barcodeTextView.getText().toString()); //wprowadzamy wartosci wpisane w naszym layoucie do wczesniej utworzonego obiektu values
         values.put(DBContract.Product.COLUMN_PRODUCT_NAME, binding.nameTextView.getText().toString());
         values.put(DBContract.Product.COLUMN_PRODUCT_PRICE, binding.priceTextView.getText().toString());
-        values.put(DBContract.Product.COLUMN_PRODUCT_QUANTITY, binding.quantityEditText.getText().toString());
+        values.put(DBContract.Product.COLUMN_PRODUCT_QUANTITY, String.valueOf(binding.quantityNumberPicker.getValue()));
 
         long newRowId = 0; //tworzymy zmienna do ktorej przypiszemy id nowego wiersza (w przypadku bledu podczas dodawania zostanie zwrocona wartosc -1, w przypadku poprawnego dodania - wartosc >=1, w naszym przypadku jezeli kod kreskowy nie bedzie unikalny zostanie zwrocone 0)
 

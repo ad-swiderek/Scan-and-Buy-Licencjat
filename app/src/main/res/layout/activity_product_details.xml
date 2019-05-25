@@ -36,7 +36,7 @@
             android:text="Dodaj do koszyka"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/quantityEditText" />
+            app:layout_constraintTop_toBottomOf="@+id/quantityNumberPicker" />
 
         <TextView
             android:id="@+id/textView2"
@@ -45,6 +45,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="24dp"
+            android:text="Podaj liczbę sztuk"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/priceTextView" />
 
@@ -104,42 +105,44 @@
             android:layout_height="64dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="50dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="Skanuj kolejny produkt"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.072"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addToCartBtn" />
 
         <Button
             android:id="@+id/showCartBtn"
             android:layout_width="164dp"
-            android:layout_height="56dp"
+            android:layout_height="64dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="50dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="Pokaż koszyk"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.93"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scanBtn" />
+            app:layout_constraintTop_toBottomOf="@+id/addToCartBtn" />
 
-        <EditText
-            android:id="@+id/quantityEditText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
-            android:ems="10"
-            android:inputType="numberDecimal"
+        <NumberPicker
+            android:id="@+id/quantityNumberPicker"
+
+            android:layout_width="62dp"
+            android:layout_height="101dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            android:descendantFocusability="blocksDescendants" ></NumberPicker>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -3,6 +3,7 @@ package com.example.adrian.myapplication;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -86,7 +87,8 @@ public class CartActivity extends AppCompatActivity {
         Intent intent = new Intent(this, QRCodePayment.class);
         String message = String.format("%.2f", fullPrice);
         intent.putExtra(EXTRA_MESSAGE, message);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        ActivityCompat.finishAffinity(this);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 
