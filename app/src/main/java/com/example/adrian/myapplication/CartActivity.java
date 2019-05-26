@@ -30,6 +30,7 @@ public class CartActivity extends AppCompatActivity {
     private ListView listView;
     private TextView totalAmountTV;
     private Button deleteBtn;
+    private Button offlinePaymentBtn;
     float fullPrice;
     public static final String EXTRA_MESSAGE = "com.example.adrian.myapplication";
     //private SQLiteDatabase db;
@@ -48,7 +49,7 @@ public class CartActivity extends AppCompatActivity {
 
         readFromDB();
         deleteProduct();
-        Button offlinePaymentBtn = findViewById(R.id.offlinePaymentBtn);
+        offlinePaymentBtn = findViewById(R.id.offlinePaymentBtn);
         offlinePaymentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +67,7 @@ public class CartActivity extends AppCompatActivity {
         fullPrice = 0;
         if (cursor.getCount() == 0) {
             Toast.makeText(this, "Koszyk pusty", Toast.LENGTH_LONG).show();
+            offlinePaymentBtn.setEnabled(false);
         } else {
             while (cursor.moveToNext()) {
                 pricePerOne = Float.parseFloat(cursor.getString(3)) * Float.parseFloat(cursor.getString(4));
