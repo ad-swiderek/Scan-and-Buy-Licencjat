@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,8 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.adrian.myapplication.databinding.ActivityCartBinding;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -54,7 +50,6 @@ public class CartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startQRActivity();
-
             }
         });
     }
@@ -145,6 +140,4 @@ public class CartActivity extends AppCompatActivity {
         ActivityCompat.finishAffinity(this);
         startActivity(intent);
     }
-
-
 }

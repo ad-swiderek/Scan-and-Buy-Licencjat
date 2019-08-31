@@ -38,6 +38,19 @@
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden"
             tools:replace="android:screenOrientation" />
+        <activity android:name="com.paypal.openid.RedirectUriReceiverActivity">
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="paypalcheckout"
+                    android:scheme="sampleapp" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

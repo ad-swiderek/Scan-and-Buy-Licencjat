@@ -10,7 +10,7 @@
 
         <TextView
             android:id="@+id/barcodeTextView"
-            android:layout_width="363dp"
+            android:layout_width="0dp"
             android:layout_height="29dp"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
@@ -82,54 +82,52 @@
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
             android:textColor="@android:color/black"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/productImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <TextView
             android:id="@+id/priceTextView"
             android:layout_width="0dp"
-            android:layout_height="37dp"
+            android:layout_height="35dp"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
             android:textColor="@android:color/black"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/productImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
         <Button
             android:id="@+id/scanBtn"
-            android:layout_width="174dp"
+            android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="50dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:text="Skanuj kolejny produkt"
             android:drawableLeft="@drawable/ic_barcode"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.072"
+            android:text="Skanuj kolejny"
+            app:layout_constraintEnd_toStartOf="@+id/showCartBtn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addToCartBtn" />
 
         <Button
             android:id="@+id/showCartBtn"
-            android:layout_width="164dp"
+            android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="50dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:text="Pokaż koszyk"
             android:drawableLeft="@drawable/ic_cart"
+            android:text="Pokaż koszyk"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.93"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/scanBtn"
             app:layout_constraintTop_toBottomOf="@+id/addToCartBtn" />
 
         <NumberPicker
@@ -146,6 +144,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2"
             android:descendantFocusability="blocksDescendants" ></NumberPicker>
+
+        <ImageView
+            android:id="@+id/productImage"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            tools:srcCompat="@tools:sample/avatars" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

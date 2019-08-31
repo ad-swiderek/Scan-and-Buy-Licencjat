@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,19 +17,27 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.adrian.myapplication.databinding.ActivityProductDetailsBinding;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class ProductDetailsActivity extends AppCompatActivity {
 
-    ActivityProductDetailsBinding binding;
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference databaseProducts = database.getReference("products");
+    private ActivityProductDetailsBinding binding;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseProducts = database.getReference("products");
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private StorageReference storageReference = storage.getReferenceFromUrl("gs://scanandbuy-53a52.appspot.com");
+    private StorageReference productsImagesJpg;
+    private StorageReference productsImages;
     private static final String TAG = "ProductDetailsActivity";
     private String message;
 
@@ -109,6 +118,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         });
 
+        storageReference.child(message + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(ProductDetailsActivity.this).load(uri).into(binding.productImage);
+            }
+        });
     }
 
     private void saveToCart() {
