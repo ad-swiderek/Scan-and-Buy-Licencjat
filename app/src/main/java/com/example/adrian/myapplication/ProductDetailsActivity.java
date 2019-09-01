@@ -40,8 +40,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private StorageReference productsImages;
     private static final String TAG = "ProductDetailsActivity";
     private String message;
-
-    ProductClass productClass = new ProductClass();
+    //private boolean isCartEmpty = true;
+    private ProductClass productClass = new ProductClass();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_product_details); //dodajemy binding aby moc odnosic sie bezposrednio do komponentow w naszym pliku xml
         Intent intent = getIntent(); //przyjmujemy intent z naszego main activity (czyli nasz kod kreskowy)
         message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE); //Przypisujemy kod kreskowy z intentu do String
-
+        /*if(isCartEmpty){
+            binding.showCartBtn.setEnabled(false);
+            isCartEmpty=false;
+        }*/
         readFromFirebase();
 
         TextView textView = findViewById(R.id.barcodeTextView); //wyswietlamy nasz kod kreskowy w textview
@@ -72,6 +75,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     showToastMessage("Nie odnaleziono produktu, sprawdź połączenie z internetem i zeskanuj ponownie!");
                 } else {
                     saveToCart();
+                    //isCartEmpty = false;
+                   // binding.showCartBtn.setEnabled(true);
                 }
 
                /* try {

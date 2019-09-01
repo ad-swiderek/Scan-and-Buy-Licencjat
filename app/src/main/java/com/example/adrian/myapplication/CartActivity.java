@@ -27,7 +27,7 @@ public class CartActivity extends AppCompatActivity {
     private TextView totalAmountTV;
     private Button deleteBtn;
     private Button offlinePaymentBtn;
-    float fullPrice;
+    private float fullPrice;
     public static final String EXTRA_MESSAGE = "com.example.adrian.myapplication";
     //private SQLiteDatabase db;
 
@@ -42,7 +42,6 @@ public class CartActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice, listItem);
         deleteBtn = findViewById(R.id.deleteBtn);
         deleteBtn.setEnabled(false);
-
         readFromDB();
         deleteProduct();
         offlinePaymentBtn = findViewById(R.id.offlinePaymentBtn);
@@ -62,13 +61,12 @@ public class CartActivity extends AppCompatActivity {
         fullPrice = 0;
         if (cursor.getCount() == 0) {
             Toast.makeText(this, "Koszyk pusty", Toast.LENGTH_LONG).show();
-            offlinePaymentBtn.setEnabled(false);
         } else {
             while (cursor.moveToNext()) {
                 pricePerOne = Float.parseFloat(cursor.getString(3)) * Float.parseFloat(cursor.getString(4));
                 fullPrice += pricePerOne;
-                listItem.add(cursor.getString(0) + ". " + cursor.getString(2) + " | sztuk:  " + cursor.getString(4)
-                        + " | łączna cena: " + String.format("%.2f", pricePerOne) + " (" + cursor.getString(3) + " za szt.)");
+                listItem.add(cursor.getString(2) + "      " + cursor.getString(4)
+                        + " * " + cursor.getString(3) + "  =  " + String.format("%.2f", pricePerOne));
                 listOfId.add(cursor.getInt(0));
             }
             displayProducts();

@@ -100,36 +100,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-        <Button
-            android:id="@+id/scanBtn"
-            android:layout_width="0dp"
-            android:layout_height="64dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:drawableLeft="@drawable/ic_barcode"
-            android:text="Skanuj kolejny"
-            app:layout_constraintEnd_toStartOf="@+id/showCartBtn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addToCartBtn" />
-
-        <Button
-            android:id="@+id/showCartBtn"
-            android:layout_width="0dp"
-            android:layout_height="64dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:drawableLeft="@drawable/ic_cart"
-            android:text="Pokaż koszyk"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/scanBtn"
-            app:layout_constraintTop_toBottomOf="@+id/addToCartBtn" />
-
         <NumberPicker
             android:id="@+id/quantityNumberPicker"
 
@@ -145,7 +115,45 @@
             app:layout_constraintTop_toBottomOf="@+id/textView2"
             android:descendantFocusability="blocksDescendants" ></NumberPicker>
 
-        <ImageView
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/bottomBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#C4E0E0E0"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            tools:layout_editor_absoluteX="93dp">
+
+            <LinearLayout
+                android:id="@+id/LinearLayout02"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
+
+                <Button
+                    android:id="@+id/scanBtn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#00000000"
+                    android:drawableLeft="@drawable/ic_barcode"
+                    android:text="Skanuj" />
+
+                <Button
+                    android:id="@+id/showCartBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#00000000"
+                    android:drawableLeft="@drawable/ic_cart"
+                    android:text="Koszyk" />
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/productImage"
             android:layout_width="128dp"
             android:layout_height="128dp"
