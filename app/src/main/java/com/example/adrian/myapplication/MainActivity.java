@@ -41,7 +41,9 @@ public class MainActivity extends AppCompatActivity {
         helpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showHelpMessage();
+                showToastMessage("Do działania aplikacji wymagany jest dostęp do internetu " +
+                        "oraz moduł aparatu. Aplikacja została przystosowana do wyświetlania na " +
+                        "ekranach o przekątnej powyzej 4,5\"");
             }
         });
     }
@@ -69,8 +71,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showHelpMessage() {
-        Toast.makeText(this, "Do działania aplikacji wymagany jest dostęp do " +
-                "internetu oraz moduł aparatu", Toast.LENGTH_LONG).show();
+    private void showToastMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }
