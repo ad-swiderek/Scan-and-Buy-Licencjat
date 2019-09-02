@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".AddProductActivity">
 
-        <TextView
-            android:id="@+id/barcodeTextView"
-            android:layout_width="0dp"
-            android:layout_height="29dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
-            android:text="TextView"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
+        <NumberPicker
+            android:id="@+id/quantityNumberPicker"
+
+            android:layout_width="62dp"
+            android:layout_height="101dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:descendantFocusability="blocksDescendants"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/textView2"></NumberPicker>
 
         <TextView
             android:id="@+id/textView2"
@@ -85,20 +84,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-        <NumberPicker
-            android:id="@+id/quantityNumberPicker"
-
-            android:layout_width="62dp"
-            android:layout_height="101dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+        <TextView
+            android:id="@+id/barcodeTextView"
+            android:layout_width="0dp"
+            android:layout_height="29dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:text="TextView"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
-            android:descendantFocusability="blocksDescendants" ></NumberPicker>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/bottomBar"
@@ -125,14 +125,15 @@
                     android:background="#00000000"
                     android:drawableLeft="@drawable/ic_barcode"
                     android:text="Skanuj" />
+
                 <Button
                     android:id="@+id/addToCartBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="#00000000"
-                    android:text="Dodaj"
-                    android:drawableLeft="@drawable/ic_add_to_cart"/>
+                    android:drawableLeft="@drawable/ic_add_to_cart"
+                    android:text="Dodaj" />
 
                 <Button
                     android:id="@+id/showCartBtn"
@@ -145,8 +146,7 @@
             </LinearLayout>
         </android.support.v7.widget.Toolbar>
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/productImage"
             android:layout_width="128dp"
             android:layout_height="128dp"

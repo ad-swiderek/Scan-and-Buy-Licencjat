@@ -1,6 +1,5 @@
 package com.example.adrian.myapplication;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.SQLException;
@@ -12,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,9 +27,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class ProductDetailsActivity extends AppCompatActivity {
 
     private ActivityProductDetailsBinding binding;
@@ -46,16 +41,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_product_details); //dodajemy binding aby moc odnosic sie bezposrednio do komponentow w naszym pliku xml
-        Intent intent = getIntent(); //przyjmujemy intent z naszego main activity (czyli nasz kod kreskowy)
-        message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE); //Przypisujemy kod kreskowy z intentu do String
-        /*if(isCartEmpty){
-            binding.showCartBtn.setEnabled(false);
-            isCartEmpty=false;
-        }*/
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_product_details);
+        Intent intent = getIntent();
+        message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+
         readFromFirebase();
 
-        TextView textView = findViewById(R.id.barcodeTextView); //wyswietlamy nasz kod kreskowy w textview
+        TextView textView = findViewById(R.id.barcodeTextView);
         textView.setText(message);
 
         Button scanBtn = findViewById(R.id.scanBtn);
@@ -72,17 +64,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (productClass.getQuantity() == null) {
-                    showToastMessage("Nie odnaleziono produktu, sprawdź połączenie z internetem i zeskanuj ponownie!");
+                    showToastMessage("Nie odnaleziono produktu, sprawdź połączenie z internetem" +
+                            " i zeskanuj ponownie!");
                 } else {
                     saveToCart();
                 }
-
-               /* try {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                } catch (Exception e) {
-                    // TODO: handle exception
-                }*/
             }
         });
 
@@ -90,11 +76,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
         showCartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent cartIntent = new Intent(ProductDetailsActivity.this, CartActivity.class);
+                Intent cartIntent = new Intent(ProductDetailsActivity.this,
+                        CartActivity.class);
                 startActivity(cartIntent);
             }
         });
-        //readFromDB(); //odczytujemy dane z bazy na podstawie zeskanowanego kodu kreskowego
     }
 
     private void readFromFirebase() {
@@ -109,7 +95,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     binding.nameTextView.setText(productClass.getProductName());
                     binding.priceTextView.setText(productClass.getPrice());
                     binding.quantityNumberPicker.setMinValue(1);
-                    binding.quantityNumberPicker.setMaxValue(Integer.parseInt(productClass.getQuantity()));
+                    binding.quantityNumberPicker.setMaxValue(Integer.parseInt(productClass
+                            .getQuantity()));
                 } catch (NumberFormatException e) {
                     showToastMessage("Nie odnaleziono produktu, zeskanuj ponownie!");
                 }
@@ -130,28 +117,35 @@ public class ProductDetailsActivity extends AppCompatActivity {
     }
 
     private void saveToCart() {
-        SQLiteDatabase db = new DBHelper(this).getWritableDatabase(); //tworzymy komponent ktory pozwoli zapisac dane do bazy
+        SQLiteDatabase db = new DBHelper(this).getWritableDatabase();
 
         ContentValues values = new ContentValues();
 
-        values.put(DBContract.Product.COLUMN_BARCODE_NUMBER, binding.barcodeTextView.getText().toString()); //wprowadzamy wartosci wpisane w naszym layoucie do wczesniej utworzonego obiektu values
-        values.put(DBContract.Product.COLUMN_PRODUCT_NAME, binding.nameTextView.getText().toString());
-        values.put(DBContract.Product.COLUMN_PRODUCT_PRICE, binding.priceTextView.getText().toString());
-        values.put(DBContract.Product.COLUMN_PRODUCT_QUANTITY, String.valueOf(binding.quantityNumberPicker.getValue()));
-        values.put(DBContract.Product.COLUMN_PRODUCT_FULL_QUANTITY, String.valueOf(binding.quantityNumberPicker.getMaxValue()));
-        long newRowId = 0; //tworzymy zmienna do ktorej przypiszemy id nowego wiersza (w przypadku bledu podczas dodawania zostanie zwrocona wartosc -1, w przypadku poprawnego dodania - wartosc >=1, w naszym przypadku jezeli kod kreskowy nie bedzie unikalny zostanie zwrocone 0)
+        values.put(DBContract.Product.COLUMN_BARCODE_NUMBER, binding.barcodeTextView.getText()
+                .toString());
+        values.put(DBContract.Product.COLUMN_PRODUCT_NAME, binding.nameTextView.getText()
+                .toString());
+        values.put(DBContract.Product.COLUMN_PRODUCT_PRICE, binding.priceTextView.getText()
+                .toString());
+        values.put(DBContract.Product.COLUMN_PRODUCT_QUANTITY,
+                String.valueOf(binding.quantityNumberPicker.getValue()));
+        values.put(DBContract.Product.COLUMN_PRODUCT_FULL_QUANTITY,
+                String.valueOf(binding.quantityNumberPicker.getMaxValue()));
+        long newRowId = 0; //błąd - wartosc -1, sukces - wartosc >=1, nieunikatowy kod kreskowy 0
 
-        try { //łapanie wyjątków w przypadku bledu podczas dodawania do bazy
+        try {
             newRowId = db.insertOrThrow(DBContract.Product.TABLE_NAME, null, values);
         } catch (SQLException e) {
             Log.e("Exception", "SQLException" + String.valueOf(e.getMessage()));
             e.printStackTrace();
         }
 
-        if (newRowId == -1) { //wyswietlanie tego o czym pisalem powyzej w postaci toasta
-            Toast.makeText(this, "Podczas dodawania wystąpił błąd", Toast.LENGTH_LONG).show();
+        if (newRowId == -1) {
+            Toast.makeText(this, "Podczas dodawania wystąpił błąd",
+                    Toast.LENGTH_LONG).show();
         } else if (newRowId == 0) {
-            Toast.makeText(this, "Produt znajduje się już w koszyku", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Produt znajduje się już w koszyku",
+                    Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "Dodano do koszyka", Toast.LENGTH_LONG).show();
         }

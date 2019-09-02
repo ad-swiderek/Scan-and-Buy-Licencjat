@@ -7,7 +7,7 @@ public final class DBContract {
     private DBContract() {
     }
 
-    public static class Product implements BaseColumns { //utworzenie naszej tabeli i jej kolumn
+    public static class Product implements BaseColumns {
         public static final String TABLE_NAME = "products";
         public static final String COLUMN_BARCODE_NUMBER = "barcode";
         public static final String COLUMN_PRODUCT_NAME = "name";
@@ -16,7 +16,7 @@ public final class DBContract {
         public static final String COLUMN_PRODUCT_FULL_QUANTITY = "fullQuantity";
 
 
-        public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + //nadanie typow danych i ograniczen
+        public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_NAME + " (" +
                 _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_BARCODE_NUMBER + " TEXT UNIQUE, " +

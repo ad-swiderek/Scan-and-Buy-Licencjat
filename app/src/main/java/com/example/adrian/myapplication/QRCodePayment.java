@@ -28,7 +28,8 @@ public class QRCodePayment extends AppCompatActivity {
 
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
-            BitMatrix bitMatrix = multiFormatWriter.encode(message, BarcodeFormat.QR_CODE, 300, 300);
+            BitMatrix bitMatrix = multiFormatWriter.encode(message, BarcodeFormat.QR_CODE,
+                    300, 300);
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
             qrImageView.setImageBitmap(bitmap);

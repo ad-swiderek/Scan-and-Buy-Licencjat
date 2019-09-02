@@ -14,10 +14,9 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button staffBtn; //przyciski do wyboru funkcji klienta lub pracownika
     private Button customerBtn;
     private Button helpBtn;
-    public static final String EXTRA_MESSAGE = "com.example.adrian.scanandbuy"; //wiadomosc (kod kreskowy) do pozniejszego przeslania w intencie
+    public static final String EXTRA_MESSAGE = "com.example.adrian.scanandbuy";
     private final Activity activity = this;
     private boolean firstUse = true;
 
@@ -29,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             this.deleteDatabase("products_database");
             firstUse = false;
         }
-        customerBtn = (Button) findViewById(R.id.customerBtn);
+        customerBtn = findViewById(R.id.customerBtn);
         helpBtn = findViewById(R.id.helpBtn);
 
         customerBtn.setOnClickListener(new View.OnClickListener() {
@@ -47,21 +46,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    protected void scan() { //uruchamiam skaner kodow kreskowych
-        IntentIntegrator integrator = new IntentIntegrator(activity); //tworze specjalny intent z biblioteki zxing ktory pozwala przejsc do activity ze skanerem
-        integrator.setBeepEnabled(false); //wylaczam dzwiek skanera
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES); //skaner jest w trybie skanowania wszystkich mozliwych kodow dostepnych w bibliotece
-        integrator.initiateScan(); //inicjuje skanowanie
+    protected void scan() {
+        IntentIntegrator integrator = new IntentIntegrator(activity);
+        integrator.setBeepEnabled(false);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+        integrator.initiateScan();
         integrator.setOrientationLocked(true);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data); //zapisuje rezultat naszego skanowania
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             try {
                 Intent intent = new Intent(this, ProductDetailsActivity.class);
-                String message = result.getContents().toString();
+                String message = result.getContents();
                 intent.putExtra(EXTRA_MESSAGE, message);
                 startActivity(intent);
             } catch (Exception e) {
@@ -71,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showHelpMessage() {
-        Toast.makeText(this, "Do działania aplikacji wymagany jest dostęp do internetu oraz moduł aparatu", Toast.LENGTH_LONG).show();
-
+        Toast.makeText(this, "Do działania aplikacji wymagany jest dostęp do " +
+                "internetu oraz moduł aparatu", Toast.LENGTH_LONG).show();
     }
 }

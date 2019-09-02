@@ -5,12 +5,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
-    //utworzenie bazy danych
     private static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "products_database";
-    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + DBContract.Product.TABLE_NAME;
+    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " +
+            DBContract.Product.TABLE_NAME;
 
-    public DBHelper(Context context){
+    public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
