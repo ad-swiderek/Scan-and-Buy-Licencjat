@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             this.deleteDatabase("products_database");
             firstUse = false;
         }
-        customerBtn = findViewById(R.id.customerBtn);
+        customerBtn = findViewById(R.id.scanBtn);
         helpBtn = findViewById(R.id.helpBtn);
 
         customerBtn.setOnClickListener(new View.OnClickListener() {
