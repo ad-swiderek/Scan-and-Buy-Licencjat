@@ -3,9 +3,12 @@ package com.example.adrian.myapplication;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,8 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.adrian.myapplication.databinding.ActivityCartBinding;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CartActivity extends AppCompatActivity {
     ActivityCartBinding binding;
@@ -29,7 +36,10 @@ public class CartActivity extends AppCompatActivity {
     private Button offlinePaymentBtn;
     private float fullPrice;
     public static final String EXTRA_MESSAGE = "com.example.adrian.myapplication";
-    //private SQLiteDatabase db;
+    private static final String TAG = "CartActivity";
+    private Map<String, String> barcodeQuantityMap = new HashMap<String, String>();
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseProducts = database.getReference("products");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +58,7 @@ public class CartActivity extends AppCompatActivity {
         offlinePaymentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                removePurchasedItemsFromFirebase();
                 startQRActivity();
             }
         });
@@ -68,6 +79,9 @@ public class CartActivity extends AppCompatActivity {
                 listItem.add(cursor.getString(2) + "      " + cursor.getString(4)
                         + " * " + cursor.getString(3) + "  =  " + String.format("%.2f", pricePerOne));
                 listOfId.add(cursor.getInt(0));
+                int newQuantity = Integer.parseInt(cursor.getString(5)) -
+                        Integer.parseInt(cursor.getString(4));
+                barcodeQuantityMap.put(cursor.getString(1), String.valueOf(newQuantity));
             }
             displayProducts();
         }
@@ -137,5 +151,11 @@ public class CartActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_MESSAGE, message);
         ActivityCompat.finishAffinity(this);
         startActivity(intent);
+    }
+
+    private void removePurchasedItemsFromFirebase() {
+        for (Map.Entry<String, String> entry : barcodeQuantityMap.entrySet()) {
+            databaseProducts.child(entry.getKey()).child("quantity").setValue(String.valueOf(entry.getValue()));
+        }
     }
 }

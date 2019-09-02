@@ -29,6 +29,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ProductDetailsActivity extends AppCompatActivity {
 
     private ActivityProductDetailsBinding binding;
@@ -36,11 +39,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private DatabaseReference databaseProducts = database.getReference("products");
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference storageReference = storage.getReferenceFromUrl("gs://scanandbuy-53a52.appspot.com");
-    private StorageReference productsImagesJpg;
-    private StorageReference productsImages;
     private static final String TAG = "ProductDetailsActivity";
     private String message;
-    //private boolean isCartEmpty = true;
     private ProductClass productClass = new ProductClass();
 
     @Override
@@ -75,8 +75,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     showToastMessage("Nie odnaleziono produktu, sprawdź połączenie z internetem i zeskanuj ponownie!");
                 } else {
                     saveToCart();
-                    //isCartEmpty = false;
-                   // binding.showCartBtn.setEnabled(true);
                 }
 
                /* try {
@@ -140,7 +138,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         values.put(DBContract.Product.COLUMN_PRODUCT_NAME, binding.nameTextView.getText().toString());
         values.put(DBContract.Product.COLUMN_PRODUCT_PRICE, binding.priceTextView.getText().toString());
         values.put(DBContract.Product.COLUMN_PRODUCT_QUANTITY, String.valueOf(binding.quantityNumberPicker.getValue()));
-
+        values.put(DBContract.Product.COLUMN_PRODUCT_FULL_QUANTITY, String.valueOf(binding.quantityNumberPicker.getMaxValue()));
         long newRowId = 0; //tworzymy zmienna do ktorej przypiszemy id nowego wiersza (w przypadku bledu podczas dodawania zostanie zwrocona wartosc -1, w przypadku poprawnego dodania - wartosc >=1, w naszym przypadku jezeli kod kreskowy nie bedzie unikalny zostanie zwrocone 0)
 
         try { //łapanie wyjątków w przypadku bledu podczas dodawania do bazy
@@ -161,6 +159,5 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     private void showToastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-
     }
 }
