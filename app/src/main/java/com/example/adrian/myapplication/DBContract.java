@@ -6,7 +6,7 @@ import android.provider.BaseColumns;
 public final class DBContract {
     private DBContract() {
     }
-
+    //zdefiniowanie oraz utworzenie lokalnej relacyjnej bazy danych
     public static class Product implements BaseColumns {
         public static final String TABLE_NAME = "products";
         public static final String COLUMN_BARCODE_NUMBER = "barcode";

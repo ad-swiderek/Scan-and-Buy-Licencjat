@@ -43,15 +43,15 @@ public class ProductDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_product_details);
         Intent intent = getIntent();
-        message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE); //przypisanie kodu kreskowego odebranego z MainActivity
 
-        readFromFirebase();
+        readFromFirebase(); //odczytanie danych z bazy w chmurze
 
         TextView textView = findViewById(R.id.barcodeTextView);
         textView.setText(message);
 
         Button scanBtn = findViewById(R.id.scanBtn);
-        scanBtn.setOnClickListener(new View.OnClickListener() {
+        scanBtn.setOnClickListener(new View.OnClickListener() { //przypisanie akcji powrót do funkcji skanowania po naciśnięciu przycisku
             @Override
             public void onClick(View v) {
                 finish();
@@ -62,7 +62,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         addToCartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { //przypisanie akcji dodawania produktu do koszyka po naciśnięciu przycisku
                 if (productClass.getQuantity() == null) {
                     showToastMessage("Nie odnaleziono produktu, sprawdź połączenie z internetem" +
                             " i zeskanuj ponownie!");
@@ -72,7 +72,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         });
 
-        Button showCartBtn = findViewById(R.id.showCartBtn);
+        Button showCartBtn = findViewById(R.id.showCartBtn); //przypisanie akcji przejścia do okna z koszykiem po naciśnięciu przycisku
         showCartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,7 +83,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void readFromFirebase() {
+    private void readFromFirebase() { //odczyt informacji z bazy danych w chmurze na podstawie kodu kreskowego oraz przypisanie ich do obiektu a następnie wyświetlenie
         Query query = databaseProducts.orderByChild("barcode").equalTo(message);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -110,13 +110,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         storageReference.child(message + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
-            public void onSuccess(Uri uri) {
+            public void onSuccess(Uri uri) { //odczyt i wyświetlenie zdjęcia produktu
                 Glide.with(ProductDetailsActivity.this).load(uri).into(binding.productImage);
             }
         });
     }
 
-    private void saveToCart() {
+    private void saveToCart() { //zapisanie danych produktu oraz wybranej przez użytkownika ilości do koszyka będącego lokalną relacyjną bazą danych
         SQLiteDatabase db = new DBHelper(this).getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -151,7 +151,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private void showToastMessage(String message) {
+    private void showToastMessage(String message) { //wyświetlenie komunikatu w postaci toast'a
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

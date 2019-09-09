@@ -49,19 +49,19 @@ public class CartActivity extends AppCompatActivity {
                 listItem);
         deleteBtn = findViewById(R.id.deleteBtn);
         deleteBtn.setEnabled(false);
-        readFromDB();
-        deleteProduct();
+        readFromDB(); //odczyt dodanych do koszyka produktów
+        deleteProduct(); //usuniecie zaznaczonej pozycji z listy oraz bazy danych
         offlinePaymentBtn = findViewById(R.id.offlinePaymentBtn);
         offlinePaymentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { //przypisanie do przycisku możliwości przejścia do kolejnego activity z kodem do płatności oraz usunięcie zakupionych produktów z bazy w chmurze
                 removePurchasedItemsFromFirebase();
                 startQRActivity();
             }
         });
     }
 
-    private void readFromDB() {
+    private void readFromDB() { //odczyt produktów dodanych do koszyka z bazy danych oraz zdefiniowanie sposobu wyświetlania
         barcodeQuantityMap.clear();
         SQLiteDatabase db = new DBHelper(this).getReadableDatabase();
         String query = "Select * from " + DBContract.Product.TABLE_NAME;
@@ -81,18 +81,14 @@ public class CartActivity extends AppCompatActivity {
                 listOfId.add(cursor.getInt(0));
                 int newQuantity = Integer.parseInt(cursor.getString(5)) -
                         Integer.parseInt(cursor.getString(4));
-                barcodeQuantityMap.put(cursor.getString(1), String.valueOf(newQuantity));
+                barcodeQuantityMap.put(cursor.getString(1), String.valueOf(newQuantity)); //dodanie informacji na temat ilości danego produktu którą należy usunąć z głównej bazy danych po dokonaniu zakupu
             }
             displayProducts();
         }
         totalAmountTV.setText("DO ZAPŁATY: " + String.format("%.2f", fullPrice) + " PLN");
     }
 
-    private void showToastMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    }
-
-    private void displayProducts() {
+    private void displayProducts() { //wyświetlenie listy produktów oraz możliwość zaznaczenia elementu listy
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
@@ -104,7 +100,7 @@ public class CartActivity extends AppCompatActivity {
         });
     }
 
-    private void deleteProduct() {
+    private void deleteProduct() { //usunięcie zaznaczonego produktu z listy oraz bazy danych a następnie ponowny odczyt z bazy
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,25 +115,25 @@ public class CartActivity extends AppCompatActivity {
         });
     }
 
-    private void deleteRow(int id) {
+    private void deleteRow(int id) { //usunięcie produktu o wskazanym id z lokalnej bazy danych
         SQLiteDatabase db = new DBHelper(this).getReadableDatabase();
         String query = "DELETE FROM " + DBContract.Product.TABLE_NAME + " WHERE " +
                 DBContract.Product._ID + " = '" + id + "'";
         db.execSQL(query);
     }
 
-    private void startQRActivity() {
+    private void removePurchasedItemsFromFirebase() { //usunięcie zakupionych produktów z głównej bazy danych w chmurze
+        for (Map.Entry<String, String> entry : barcodeQuantityMap.entrySet()) {
+            databaseProducts.child(entry.getKey()).child("quantity")
+                    .setValue(String.valueOf(entry.getValue()));
+        }
+    }
+
+    private void startQRActivity() { //uruchomienie activity z kodem umożliwiającym dokonanie płatności, przekazanie do niego kwoty do zapłacenia oraz ustawienie braku możliwości powrotu do wcześniejszych okienek aplikacji
         Intent intent = new Intent(this, QRCodePayment.class);
         String message = String.format("%.2f", fullPrice);
         intent.putExtra(EXTRA_MESSAGE, message);
         ActivityCompat.finishAffinity(this);
         startActivity(intent);
-    }
-
-    private void removePurchasedItemsFromFirebase() {
-        for (Map.Entry<String, String> entry : barcodeQuantityMap.entrySet()) {
-            databaseProducts.child(entry.getKey()).child("quantity")
-                    .setValue(String.valueOf(entry.getValue()));
-        }
     }
 }
